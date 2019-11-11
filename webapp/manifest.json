@@ -14,18 +14,11 @@
 			"version": "0.0.0"
 		},
 		"dataSources": {
-			"ZHOUI5_CUSTOMER_SRV": {
-				"uri": "/sap/opu/odata/sap/ZHOUI5_CUSTOMER_SRV/",
+			"ZHOFIO_CUSTOMER_SRV": {
+				"uri": "/sap/opu/odata/sap/ZHOFIO_CUSTOMER_SRV/",
 				"type": "OData",
 				"settings": {
-					"localUri": "localService/metadata.xml"
-				}
-			},
-			"ZHOFIO_SRV": {
-				"uri": "/sap/opu/odata/sap/ZHOFIO_SRV/",
-				"type": "OData",
-				"settings": {
-					"localUri": "localService/ZHOFIO_SRV/metadata.xml"
+					"localUri": "localService/ZHOFIO_CUSTOMER_SRV/metadata.xml"
 				}
 			}
 		}
@@ -77,17 +70,19 @@
 				"type": "sap.ui.model.odata.v2.ODataModel",
 				"settings": {
 					"defaultOperationMode": "Server",
-					"defaultBindingMode": "TwoWay",
+					"defaultBindingMode": "OneWay",
 					"defaultCountMode": "Request"
 				},
-				"dataSource": "ZHOFIO_SRV",
+				"dataSource": "ZHOFIO_CUSTOMER_SRV",
 				"preload": true
 			}
 		},
 		"resources": {
-			"css": [{
-				"uri": "css/style.css"
-			}]
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
 		},
 		"routing": {
 			"config": {
@@ -99,23 +94,33 @@
 				"controlId": "app",
 				"clearControlAggregation": false
 			},
-			"routes": [{
-				"name": "RouteApp",
-				"pattern": "RouteApp",
-				"target": ["TargetApp"]
-			}, {
-				"name": "Master",
-				"pattern": "/",
-				"titleTarget": "",
-				"greedy": false,
-				"target": ["Master"]
-			}, {
-				"name": "Customer",
-				"pattern": "/customer/{customerid}",
-				"titleTarget": "",
-				"greedy": false,
-				"target": ["Customer"]
-			}],
+			"routes": [
+				{
+					"name": "RouteApp",
+					"pattern": "RouteApp",
+					"target": [
+						"TargetApp"
+					]
+				},
+				{
+					"name": "Master",
+					"pattern": "/",
+					"titleTarget": "",
+					"greedy": false,
+					"target": [
+						"Master"
+					]
+				},
+				{
+					"name": "Customer",
+					"pattern": "/customer/{customerid}",
+					"titleTarget": "",
+					"greedy": false,
+					"target": [
+						"Customer"
+					]
+				}
+			],
 			"targets": {
 				"TargetApp": {
 					"viewType": "XML",
