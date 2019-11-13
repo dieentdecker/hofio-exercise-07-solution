@@ -12,6 +12,7 @@ sap.ui.define([
 		_formFragments: {},
 		_sMode: "",
 		_oSmartForm: null,
+		_sUploadUrl: "",
 
 		onInit: function () {
 			this.getRouter().getRoute("Customer").attachPatternMatched(this._onPatternMatched, this);
@@ -27,7 +28,6 @@ sap.ui.define([
 			this.setModel(editModel, "editModel");
 
 			this._oUploadCollection = this.getView().byId("customer_uploadcollection");
-			this._sUploadUrl = "";
 			//this._oUploadCollection.setUploadUrl("/sap/opu/odata/sap/ZHOFIO_CUSTOMER_SRV/CustomerDocumentSet");
 			this._oSmartForm = this.getView().byId("customer_smartform");
 			this._oSmartForm.attachEditToggled(function (oControlEvent) {
@@ -220,11 +220,11 @@ sap.ui.define([
 					if (oData.DocumentType === "application/pdf") {
 						let pdfViewer = new sap.m.PDFViewer();
 
-						pdfViewer.setSource(sPath + "/$value");
+						pdfViewer.setSource(oData.__metadata.uri + "/$value");
 						pdfViewer.setTitle(oData.DocumentName);
 						pdfViewer.open();
 					} else {
-						sap.m.URLHelper.redirect(sPath + "/$value");
+						sap.m.URLHelper.redirect(oData.__metadata.uri + "/$value");
 					}
 				}
 			});
