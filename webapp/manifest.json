@@ -18,7 +18,15 @@
 				"uri": "/sap/opu/odata/sap/ZHOFIO_CUSTOMER_SRV/",
 				"type": "OData",
 				"settings": {
-					"localUri": "localService/ZHOFIO_CUSTOMER_SRV/metadata.xml"
+					"localUri": "localService/ZHOFIO_CUSTOMER_SRV/metadata.xml",
+					"annotations": ["annotation_customer"]
+				}
+			},
+			"annotation_customer": {
+				"type": "ODataAnnotation",
+				"uri": "annotation_customer.xml",
+				"settings": {
+					"localUri": "annotation_customer.xml"
 				}
 			}
 		}
@@ -70,19 +78,21 @@
 				"type": "sap.ui.model.odata.v2.ODataModel",
 				"settings": {
 					"defaultOperationMode": "Server",
-					"defaultBindingMode": "OneWay",
+					"defaultBindingMode": "TwoWay",
 					"defaultCountMode": "Request"
 				},
 				"dataSource": "ZHOFIO_CUSTOMER_SRV",
 				"preload": true
+			},
+			"@i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"uri": "i18n/i18n.properties"
 			}
 		},
 		"resources": {
-			"css": [
-				{
-					"uri": "css/style.css"
-				}
-			]
+			"css": [{
+				"uri": "css/style.css"
+			}]
 		},
 		"routing": {
 			"config": {
@@ -94,33 +104,23 @@
 				"controlId": "app",
 				"clearControlAggregation": false
 			},
-			"routes": [
-				{
-					"name": "RouteApp",
-					"pattern": "RouteApp",
-					"target": [
-						"TargetApp"
-					]
-				},
-				{
-					"name": "Master",
-					"pattern": "/",
-					"titleTarget": "",
-					"greedy": false,
-					"target": [
-						"Master"
-					]
-				},
-				{
-					"name": "Customer",
-					"pattern": "/customer/{customerid}",
-					"titleTarget": "",
-					"greedy": false,
-					"target": [
-						"Customer"
-					]
-				}
-			],
+			"routes": [{
+				"name": "RouteApp",
+				"pattern": "RouteApp",
+				"target": ["TargetApp"]
+			}, {
+				"name": "Master",
+				"pattern": "/",
+				"titleTarget": "",
+				"greedy": false,
+				"target": ["Master"]
+			}, {
+				"name": "Customer",
+				"pattern": "/customer/{customerid}",
+				"titleTarget": "",
+				"greedy": false,
+				"target": ["Customer"]
+			}],
 			"targets": {
 				"TargetApp": {
 					"viewType": "XML",

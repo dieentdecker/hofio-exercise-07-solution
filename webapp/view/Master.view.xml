@@ -1,23 +1,31 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:fb="sap.ui.comp.filterbar"
+	xmlns:smartTable="sap.ui.comp.smarttable" xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
 	controllerName="at.clouddna.training.FioriDeepDive.controller.Master" xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page title="{i18n>master.title}">
+		<headerContent>
+			<core:Icon id="master_icon_language" src="sap-icon://globe"/>
+			<Select id="master_select_language" selectedKey="{languageModel>/currentLanguage}">
+				<items>
+					<core:Item key="de" text="Deutsch"/>
+					<core:Item key="en" text="English"/>
+				</items>
+			</Select>
+		</headerContent>
 		<content>
+			<!--
 			<fb:FilterBar id="master_filterbar" search="onTableFilter">
 				<fb:filterGroupItems>
-					<fb:FilterGroupItem groupName="customer" name="firstname" label="{i18n>app.firstname}" 
-					visibleInFilterBar="true">
+					<fb:FilterGroupItem groupName="customer" name="firstname" label="{/#Customer/Firstname/@sap:label}" visibleInFilterBar="true">
 						<fb:control>
 							<Input/>
 						</fb:control>
 					</fb:FilterGroupItem>
-					<fb:FilterGroupItem groupName="customer" name="lastname" label="{i18n>app.lastname}" 
-					visibleInFilterBar="true">
+					<fb:FilterGroupItem groupName="customer" name="lastname" label="{/#Customer/Lastname/@sap:label}" visibleInFilterBar="true">
 						<fb:control>
 							<Input/>
 						</fb:control>
 					</fb:FilterGroupItem>
-					<fb:FilterGroupItem groupName="customer" name="gender" label="{i18n>app.gender}" 
-					visibleInFilterBar="true">
+					<fb:FilterGroupItem groupName="customer" name="gender" label="{/#Customer/Gender/@sap:label}" visibleInFilterBar="true">
 						<fb:control>
 							<Select >
 								<items>
@@ -28,14 +36,44 @@
 							</Select>
 						</fb:control>
 					</fb:FilterGroupItem>
-					<fb:FilterGroupItem groupName="customer" name="email" label="{i18n>app.email}" 
-					visibleInFilterBar="true">
+					<fb:FilterGroupItem groupName="customer" name="email" label="{i18n>app.email}" visibleInFilterBar="true">
 						<fb:control>
 							<Input/>
 						</fb:control>
 					</fb:FilterGroupItem>
 				</fb:filterGroupItems>
 			</fb:FilterBar>
+			-->
+			<smartFilterBar:SmartFilterBar id="smartFilterBar" entitySet="CustomerSet" persistencyKey="SmartFilter_Explored"></smartFilterBar:SmartFilterBar>
+			<smartTable:SmartTable entitySet="CustomerSet" smartFilterId="smartFilterBar" tableType="Table" useExportToExcel="true"
+				beforeExport="onBeforeExport" useVariantManagement="true" useTablePersonalisation="true" header="{i18n>master.table.title.plurals}"
+				showRowCount="true" persistencyKey="SmartTableAnalytical_Explored" enableAutoBinding="true" demandPopin="true"
+				class="sapUiResponsiveContentPadding">
+				<smartTable:customToolbar>
+					<OverflowToolbar design="Transparent">
+						<ToolbarSpacer/>
+						<Button id="master_button_add" text="{i18n>button.add}" press="onNewCustomerPress"/>
+					</OverflowToolbar>
+				</smartTable:customToolbar>
+				<Table>
+					<columns>
+						<Column id="master_column_delete" width="100px" hAlign="Left">
+							<customData>
+								<core:CustomData key="p13nData" value='\{"columnKey":"master_column_delete", "columnIndex":"99"}'/>
+							</customData>
+							<Text text="{i18n>app.delete}"/>
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem type="Navigation" press="onCustomerPress">
+							<cells>
+								<Button icon="sap-icon://delete" press="onDeleteCustomerPress"/>
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</smartTable:SmartTable>
+			<!--
 			<Table id="master_table" items="{/CustomerSet}">
 				<headerToolbar>
 					<Toolbar>
@@ -47,28 +85,28 @@
 				</headerToolbar>
 				<columns>
 					<Column id="master_column_customerid">
-						<Text text="{i18n>app.customerid}"/>
+						<Text text="{/#Customer/CustomerId/@sap:label}"/>
 					</Column>
 					<Column id="master_column_firstname">
-						<Text text="{i18n>app.firstname}"/>
+						<Text text="{/#Customer/Firstname/@sap:label}"/>
 					</Column>
 					<Column id="master_column_lastname">
-						<Text text="{i18n>app.lastname}"/>
+						<Text text="{/#Customer/Lastname/@sap:label}"/>
 					</Column>
 					<Column id="master_column_title" minScreenWidth="Desktop">
-						<Text text="{i18n>app.title}"/>
+						<Text text="{/#Customer/AcademicTitle/@sap:label}"/>
 					</Column>
 					<Column id="master_column_gender" minScreenWidth="Desktop">
-						<Text text="{i18n>app.gender}"/>
+						<Text text="{/#Customer/Gender/@sap:label}"/>
 					</Column>
 					<Column id="master_column_email" minScreenWidth="Desktop">
-						<Text text="{i18n>app.email}"/>
+						<Text text="{/#Customer/Email/@sap:label}"/>
 					</Column>
 					<Column id="master_column_phone" minScreenWidth="Desktop">
-						<Text text="{i18n>app.phone}"/>
+						<Text text="{/#Customer/Phone/@sap:label}"/>
 					</Column>
 					<Column id="master_column_website" minScreenWidth="Desktop">
-						<Text text="{i18n>app.website}"/>
+						<Text text="{/#Customer/Website/@sap:label}"/>
 					</Column>
 					<Column>
 						<Text id="master_column_delete" text="{i18n>app.delete}"/>
@@ -88,6 +126,7 @@
 					</ColumnListItem>
 				</items>
 			</Table>
+			-->
 		</content>
 	</Page>
 </mvc:View>

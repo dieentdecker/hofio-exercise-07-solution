@@ -1,5 +1,5 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-	<ViewSettingsDialog confirm="onSortDialogConfirm">
+	<ViewSettingsDialog confirm="onSortDialogConfirm" id="dialog_tablesetting">
 		<sortItems>
 			<ViewSettingsItem text="{i18n>app.firstname}" key="Firstname" selected="true"/>
 			<ViewSettingsItem text="{i18n>app.lastname}" key="Lastname"/>

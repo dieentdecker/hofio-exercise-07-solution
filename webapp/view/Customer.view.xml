@@ -1,15 +1,53 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
-	controllerName="at.clouddna.training.FioriDeepDive.controller.Customer" xmlns:html="http://www.w3.org/1999/xhtml">
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:smartForm="sap.ui.comp.smartform"
+	xmlns:smartField="sap.ui.comp.smartfield" controllerName="at.clouddna.training.FioriDeepDive.controller.Customer"
+	xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page id="customer_page" title="{i18n>title}" showFooter="true" showNavButton="{= ${editModel>/editmode} ? false : true}"
 		navButtonPress="onNavBack">
-		<content></content>
+		<content>
+			<smartForm:SmartForm id="customer_smartform" editTogglable="true" title="{Firstname} {Lastname}">
+				<smartForm:Group>
+					<!--
+					<smartForm:GroupElement>
+						<smartField:SmartField value="{CustomerId}"/>
+					</smartForm:GroupElement>
+					-->
+					<smartForm:GroupElement>
+						<smartField:SmartField value="{Firstname}"/>
+					</smartForm:GroupElement>
+					<smartForm:GroupElement>
+						<smartField:SmartField value="{Lastname}"/>
+					</smartForm:GroupElement>
+					<smartForm:GroupElement>
+						<smartField:SmartField value="{AcademicTitle}"/>
+					</smartForm:GroupElement>
+					<smartForm:GroupElement>
+						<smartField:SmartField value="{Gender}" change="onGenderChanged"/>
+					</smartForm:GroupElement>
+					<smartForm:GroupElement>
+						<smartField:SmartField value="{Email}" change="onEmailChanged"/>
+					</smartForm:GroupElement>
+					<smartForm:GroupElement>
+						<smartField:SmartField value="{Phone}"/>
+					</smartForm:GroupElement>
+					<smartForm:GroupElement>
+						<smartField:SmartField value="{Website}"/>
+					</smartForm:GroupElement>
+				</smartForm:Group>
+			</smartForm:SmartForm>
+			<UploadCollection id="customer_uploadcollection" change="onUploadChange" multiple="true" fileDeleted="onDocumentDelete"
+				beforeUploadStarts="onBeforeUploadStarts" uploadComplete="onUploadComplete" items="{Documents}" showSeparators="All"
+				uploadEnabled="{editModel>/editmode}">
+				<items>
+					<UploadCollectionItem documentId="{DocId},{CustomerId}" press="onDocumentPress" fileName="{DocumentName}"
+						visibleDelete="{editModel>/editmode}" visibleEdit="false"/>
+				</items>
+			</UploadCollection>
+		</content>
 		<footer>
 			<Toolbar id="customer_footer">
 				<ToolbarSpacer/>
-				<Button id="customer_button_edit" text="{i18n>button.edit}" type="Emphasized" press="onEditPress" visible="{= !${editModel>/editmode}}"/>
 				<Button id="customer_button_save" text="{i18n>button.save}" type="Accept" press="onSavePress" visible="{editModel>/editmode}"/>
-				<Button id="customer_button_cancel" text="{i18n>button.cancel}" type="Reject" press="onCancelPress" 
-				visible="{editModel>/editmode}"/>
+				<Button id="customer_button_cancel" text="{i18n>button.cancel}" type="Reject" press="onCancelPress" visible="{editModel>/editmode}"/>
 			</Toolbar>
 		</footer>
 	</Page>

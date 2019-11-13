@@ -3,8 +3,9 @@ sap.ui.define([
 	"sap/m/MessageBox",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
-	"sap/ui/core/Fragment"
-], function (BaseController, MessageBox, Filter, FilterOperator, Fragment) {
+	"sap/ui/core/Fragment",
+	"sap/ui/model/json/JSONModel"
+], function (BaseController, MessageBox, Filter, FilterOperator, Fragment, JSONModel) {
 	"use strict";
 
 	return BaseController.extend("at.clouddna.training.FioriDeepDive.controller.Master", {
@@ -14,13 +15,43 @@ sap.ui.define([
 		},
 
 		_onPatternMatched: function () {
+			let sCurrentLocale = sap.ui.getCore().getConfiguration().getLanguage(),
+				oLanguageModel = new JSONModel({
+					currentLanguage: sCurrentLocale
+				});
 
+			oLanguageModel.attachPropertyChange(function (oProperty) {
+				let oLanguage = oProperty.getParameter("value"),
+					sFormatLocale = sap.ui.getCore().getConfiguration().getFormatLocale();
+
+				sap.ui.getCore().getConfiguration().setLanguage(oLanguage);
+				sap.ui.getCore().getConfiguration().setFormatLocale(sFormatLocale);
+
+			});
+
+			this.setModel(oLanguageModel, "languageModel");
 		},
 
 		onTableSortPress: function (oEvent) {
+			/*
 			this._oDialog = sap.ui.xmlfragment("at.clouddna.training.FioriDeepDive.view.TableSettingsDialog", this);
 			this._oDialog.setModel(this.getModel("i18n"), "i18n");
 			this._oDialog.open();
+			*/
+			let oView = this.getView();
+
+			if (!this.byId("dialog_tablesetting")) {
+				Fragment.load({
+					id: oView.getId(),
+					name: "at.clouddna.training.FioriDeepDive.view.TableSettingsDialog",
+					controller: this
+				}).then(function (oDialog) {
+					oView.addDependent(oDialog);
+					oDialog.open();
+				});
+			} else {
+				this.byId("dialog_tablesetting").open();
+			}
 		},
 
 		onSortDialogConfirm: function (oEvent) {
@@ -83,6 +114,9 @@ sap.ui.define([
 			let sCustomerPath = oEvent.getSource().getBindingContext().sPath,
 				oModel = this.getModel();
 
+			let oTable = this.byId("master_table");
+			oTable.setBusy(true);
+
 			MessageBox.show(this.geti18nText("dialog.delete"), {
 				icon: MessageBox.Icon.WARNING,
 				title: "",
@@ -92,9 +126,11 @@ sap.ui.define([
 						oModel.remove(sCustomerPath, {
 							success: function (oData, response) {
 								oModel.updateBindings(true);
+								oTable.setBusy(false);
 								MessageBox.information(this.geti18nText("dialog.delete.success"));
 							}.bind(this),
 							error: function (oError) {
+								oTable.setBusy(false);
 								MessageBox.error(oError.message);
 							}
 						});
