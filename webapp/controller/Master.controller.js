@@ -30,6 +30,9 @@ sap.ui.define([
 			});
 
 			this.setModel(oLanguageModel, "languageModel");
+
+			let oMessageModel = sap.ui.getCore().getMessageManager().getMessageModel();
+			this.setModel(oMessageModel, "message");
 		},
 
 		onTableSortPress: function (oEvent) {
@@ -112,32 +115,12 @@ sap.ui.define([
 
 		onDeleteCustomerPress: function (oEvent) {
 			let sCustomerPath = oEvent.getSource().getBindingContext().sPath,
-				oModel = this.getModel();
+				oModel = this.getModel(),
+				oTable = this.byId("master_smarttable");
 
-			let oTable = this.byId("master_table");
-			oTable.setBusy(true);
-
-			MessageBox.show(this.geti18nText("dialog.delete"), {
-				icon: MessageBox.Icon.WARNING,
-				title: "",
-				actions: [MessageBox.Action.YES, MessageBox.Action.NO],
-				onClose: function (sAnswer) {
-					if (sAnswer === MessageBox.Action.YES) {
-						oModel.remove(sCustomerPath, {
-							success: function (oData, response) {
-								oModel.updateBindings(true);
-								oTable.setBusy(false);
-								MessageBox.information(this.geti18nText("dialog.delete.success"));
-							}.bind(this),
-							error: function (oError) {
-								oTable.setBusy(false);
-								MessageBox.error(oError.message);
-							}
-						});
-					}
-				}.bind(this)
-			});
+			this.deleteODataEntry(oModel, sCustomerPath, null, oTable);
 		}
+
 	});
 
 });

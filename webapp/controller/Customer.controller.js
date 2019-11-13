@@ -27,11 +27,21 @@ sap.ui.define([
 			this.getView().unbindElement();
 			this.setModel(editModel, "editModel");
 
+			let oMessageModel = sap.ui.getCore().getMessageManager().getMessageModel();
+			this.setModel(oMessageModel, "message");
+
 			this._oUploadCollection = this.getView().byId("customer_uploadcollection");
 			//this._oUploadCollection.setUploadUrl("/sap/opu/odata/sap/ZHOFIO_CUSTOMER_SRV/CustomerDocumentSet");
 			this._oSmartForm = this.getView().byId("customer_smartform");
 			this._oSmartForm.attachEditToggled(function (oControlEvent) {
-				editModel.setProperty("/editmode", oControlEvent.getParameter("editable"));
+				let bEditable = oControlEvent.getParameter("editable");
+				if (bEditable) {
+					if (sap.ushell && sap.ushell.Container) {
+						sap.ushell.Container.setDirtyFlag(bEditable);
+					}
+				}
+
+				editModel.setProperty("/editmode", bEditable);
 			}, this);
 
 			this._oSmartForm.setEditable(false);
@@ -92,10 +102,13 @@ sap.ui.define([
 			oSmartForm.check();
 			if (this._isFormValid()) {
 				oSmartForm.setEditable(false);
+				this._removeAllMessages();
 
 				if (this.getModel().hasPendingChanges()) {
 					this.getModel().resetChanges();
 				}
+
+				sap.ushell.Container.setDirtyFlag(false);
 			}
 		},
 
@@ -104,10 +117,14 @@ sap.ui.define([
 
 			oSmartForm.check();
 			if (this._isFormValid()) {
-				oSmartForm.setEditable(false);
 
+				oSmartForm.setEditable(false);
+				this._removeAllMessages();
 				if (this.getModel().hasPendingChanges()) {
 					this.getModel().submitChanges();
+					if (sap.ushell && sap.ushell.Container) {
+						sap.ushell.Container.setDirtyFlag(false);
+					}
 
 					if (this._sMode === "create") {
 						MessageBox.information(this.geti18nText("dialog.create.success"), {
@@ -118,6 +135,10 @@ sap.ui.define([
 						this.onNavBack();
 					} else {
 						MessageBox.information(this.geti18nText("dialog.update.success"));
+					}
+				} else {
+					if (sap.ushell && sap.ushell.Container) {
+						sap.ushell.Container.setDirtyFlag(false);
 					}
 				}
 			}
@@ -132,34 +153,6 @@ sap.ui.define([
 
 				this._formFragments[sPropertyName].destroy();
 				this._formFragments[sPropertyName] = null;
-			}
-		},
-
-		onEmailChanged: function (oEvent) {
-			let oControl = oEvent.getSource();
-			let oValue = oEvent.getParameter("newValue");
-			let regex =
-				/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-
-			if (regex.test(oValue)) {
-				oControl.setValueState("None");
-				oControl.setValueStateText("");
-			} else {
-				oControl.setValueState("Error");
-				oControl.setValueStateText(this.geti18nText("validate.email.error"));
-			}
-		},
-
-		onGenderChanged: function (oEvent) {
-			let oValue = oEvent.getParameter("newValue"),
-				oControl = oEvent.getSource();
-
-			if (oValue !== "M" && oValue !== "F") {
-				oControl.setValueState("Error");
-				oControl.setValueStateText(this.geti18nText("validate.gender.error"));
-			} else {
-				oControl.setValueState("None");
-				oControl.setValueStateText("");
 			}
 		},
 
@@ -186,6 +179,10 @@ sap.ui.define([
 			});
 
 			return oElements.every(function (oElement) {
+				if (oElement.getValueState() == "Error") {
+					this._insertMessage("ERROR", "Error", oElement.getValueStateText());
+				}
+
 				return oElement.getValueState() === "None";
 			});
 		},
@@ -237,6 +234,11 @@ sap.ui.define([
 				oModel = this.getModel(),
 				oUploadCollection = this.getView().byId("customer_uploadcollection");
 
+			let sPath = "/CustomerDocumentSet(DocId=guid'" + sDocId + "',CustomerId=guid'" + sCustomerId + "')";
+
+			this.deleteODataEntry(oModel, sPath, null, oUploadCollection);
+
+			/*
 			oUploadCollection.setBusy(true);
 
 			oModel.remove(
@@ -250,6 +252,7 @@ sap.ui.define([
 						MessageBox.error(oError.message);
 					}
 				});
+				*/
 		}
 
 	});

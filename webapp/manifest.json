@@ -1,7 +1,7 @@
 {
 	"_version": "1.12.0",
 	"sap.app": {
-		"id": "at.clouddna.training.FioriDeepDive",
+		"id": "at.clouddna.training.FioriDeepDive01",
 		"type": "application",
 		"i18n": "i18n/i18n.properties",
 		"applicationVersion": {
@@ -19,7 +19,9 @@
 				"type": "OData",
 				"settings": {
 					"localUri": "localService/ZHOFIO_CUSTOMER_SRV/metadata.xml",
-					"annotations": ["annotation_customer"]
+					"annotations": [
+						"annotation_customer"
+					]
 				}
 			},
 			"annotation_customer": {
@@ -90,9 +92,11 @@
 			}
 		},
 		"resources": {
-			"css": [{
-				"uri": "css/style.css"
-			}]
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
 		},
 		"routing": {
 			"config": {
@@ -104,23 +108,33 @@
 				"controlId": "app",
 				"clearControlAggregation": false
 			},
-			"routes": [{
-				"name": "RouteApp",
-				"pattern": "RouteApp",
-				"target": ["TargetApp"]
-			}, {
-				"name": "Master",
-				"pattern": "/",
-				"titleTarget": "",
-				"greedy": false,
-				"target": ["Master"]
-			}, {
-				"name": "Customer",
-				"pattern": "/customer/{customerid}",
-				"titleTarget": "",
-				"greedy": false,
-				"target": ["Customer"]
-			}],
+			"routes": [
+				{
+					"name": "RouteApp",
+					"pattern": "RouteApp",
+					"target": [
+						"TargetApp"
+					]
+				},
+				{
+					"name": "Master",
+					"pattern": "/",
+					"titleTarget": "",
+					"greedy": false,
+					"target": [
+						"Master"
+					]
+				},
+				{
+					"name": "Customer",
+					"pattern": "/customer/{customerid}",
+					"titleTarget": "",
+					"greedy": false,
+					"target": [
+						"Customer"
+					]
+				}
+			],
 			"targets": {
 				"TargetApp": {
 					"viewType": "XML",
@@ -143,7 +157,7 @@
 		}
 	},
 	"sap.platform.abap": {
-		"uri": "/sap/bc/ui5_ui5/sap/zhoui5_00/webapp",
+		"uri": "/sap/bc/ui5_ui5/sap/zhofio/webapp",
 		"_version": "1.1.0"
 	},
 	"sap.platform.hcp": {

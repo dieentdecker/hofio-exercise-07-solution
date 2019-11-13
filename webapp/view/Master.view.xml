@@ -45,10 +45,10 @@
 			</fb:FilterBar>
 			-->
 			<smartFilterBar:SmartFilterBar id="smartFilterBar" entitySet="CustomerSet" persistencyKey="SmartFilter_Explored"></smartFilterBar:SmartFilterBar>
-			<smartTable:SmartTable entitySet="CustomerSet" smartFilterId="smartFilterBar" tableType="Table" useExportToExcel="true"
-				beforeExport="onBeforeExport" useVariantManagement="true" useTablePersonalisation="true" header="{i18n>master.table.title.plurals}"
-				showRowCount="true" persistencyKey="SmartTableAnalytical_Explored" enableAutoBinding="true" demandPopin="true"
-				class="sapUiResponsiveContentPadding">
+			<smartTable:SmartTable id="master_smarttable" entitySet="CustomerSet" smartFilterId="smartFilterBar" tableType="Table"
+				useExportToExcel="true" beforeExport="onBeforeExport" useVariantManagement="true" useTablePersonalisation="true"
+				header="{i18n>master.table.title.plurals}" showRowCount="true" persistencyKey="SmartTableAnalytical_Explored" enableAutoBinding="true"
+				demandPopin="true" class="sapUiResponsiveContentPadding">
 				<smartTable:customToolbar>
 					<OverflowToolbar design="Transparent">
 						<ToolbarSpacer/>
@@ -128,5 +128,11 @@
 			</Table>
 			-->
 		</content>
+		<footer>
+			<Toolbar id="master_footer">
+				<Button id="master_footer_messagepopover" icon="sap-icon://message-popup" text="{= ${message>/}.length }" type="Emphasized"
+					press="handleMessagePopoverPress"/>
+			</Toolbar>
+		</footer>
 	</Page>
 </mvc:View>

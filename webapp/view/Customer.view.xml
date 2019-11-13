@@ -45,6 +45,8 @@
 		</content>
 		<footer>
 			<Toolbar id="customer_footer">
+				<Button id="customer_footer_messagepopover" icon="sap-icon://message-popup" text="{= ${message>/}.length }" type="Emphasized"
+					press="handleMessagePopoverPress"/>
 				<ToolbarSpacer/>
 				<Button id="customer_button_save" text="{i18n>button.save}" type="Accept" press="onSavePress" visible="{editModel>/editmode}"/>
 				<Button id="customer_button_cancel" text="{i18n>button.cancel}" type="Reject" press="onCancelPress" visible="{editModel>/editmode}"/>
